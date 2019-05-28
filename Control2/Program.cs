@@ -7,9 +7,21 @@ namespace Control2
     {
         protected string Name { get; set; }
         protected string Extension { get; set; }
-        protected string Size { get; set; }
+        public string Size { get; set; }
         public abstract File ParseFile(string fileStr);
         public abstract void ShowFile(File file);
+        /*
+         * Numbers for multiplying were taken as an abstract values, just to show that GB is bigger than MB for example
+        * */
+        public int GetNumberSize()
+        {
+            if (Size.Contains("GB"))
+                return int.Parse(Size.Split("GB")[0]) * 1000000;
+            else if (Size.Contains("MB"))
+                return int.Parse(Size.Split("MB")[0]) * 1000;
+            else
+                return int.Parse(Size.Split("B")[0]);
+        }
     }
     class TextFile:File
     {
@@ -135,42 +147,9 @@ namespace Control2
                     //file.ShowFile(file);
                 }
             }
-            ShowFiles(files);
+            Utility.ShowFiles(files);
+            var sortedFiles = Utility.SortFiles(files);
         }
-        static void ShowFiles(File[] files)
-        {
-            Console.WriteLine("Text files: \t");
-            foreach (var file in files)
-            {
-               
-                if(file is TextFile)
-                {
-                    var textFile = (TextFile)file;
-                    textFile.ShowFile(textFile);
-                }
-            }
-            Console.WriteLine("Movies:");
-            foreach (var file in files)
-            {
-                
-                if (file is Movie)
-                {
-                    var movie = (Movie)file;
-                    movie.ShowFile(movie);
-
-                }
-            }
-            Console.WriteLine("Images: \t");
-            foreach (var file in files)
-            {
-               
-                if (file is Image)
-                {
-                    var image = (Image)file;
-                    image.ShowFile(image);
-
-                }
-            }
-        }
+       
     }
 }
